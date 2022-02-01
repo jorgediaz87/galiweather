@@ -15,20 +15,26 @@ class CreateSkyStatesTable extends Migration
     {
         Schema::create('sky_states', function (Blueprint $table) {
             $table->id();
-            $table->foreign('forecast_id')->references('id')->on('forecasts');
             $table->timestampTz('time_instant');
             $table->timestampTz('model_run_at');
             $table->enum('value',
                 [
                     'SUNNY', 'HIGH_CLOUDS,', 'PARTLY_CLOUDY,',
                     'OVERCAST', 'CLOUDY', 'FOG', 'SHOWERS',
-                    'OVERCAST_AND_SHOWERS', 'INTERMITENT_SNOW','INTERMITENT_SNOW',
+                    'OVERCAST_AND_SHOWERS', 'INTERMITENT_SNOW',
                     'RAIN','SNOW','STORMS','MIST','FOG_BANK','MID_CLOUDS',
                     'WEAK_RAIN','WEAK_SHOWERS','STORM_THEN_CLOUDY','MELTED_SNOW'
                 ]
             );
-            $table->string('value');
             $table->timestamps();
+        });
+
+
+        Schema::table('sky_states', function (Blueprint $table) {
+            $table->foreignId('forecast_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -39,6 +45,10 @@ class CreateSkyStatesTable extends Migration
      */
     public function down()
     {
+        Schema::table('sky_states', function (Blueprint $table) {
+            $table->dropForeign(['forecast_id']);
+        });
+
         Schema::dropIfExists('sky_states');
     }
 }

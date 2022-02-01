@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Place;
+use App\Models\Forecast;
+
 use Illuminate\Database\Seeder;
 
-use App\Models\Place;
 
 class PlaceSeeder extends Seeder
 {
@@ -15,9 +17,8 @@ class PlaceSeeder extends Seeder
      */
     public function run()
     {
-        Place::factories()
-            ->times(50)
-            ->hasForecast(10)
+        Place::factory()
+            ->times(1)
             ->create();
     }
 }

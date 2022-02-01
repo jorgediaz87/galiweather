@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\SkyState;
+use App\Models\Temperature;
 
 use Illuminate\Database\Seeder;
 
-
-class SkyStateSeeder extends Seeder
+class TemperatureSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +15,7 @@ class SkyStateSeeder extends Seeder
      */
     public function run()
     {
-        SkyState::factory()
+        Temperature::factory()
             ->times(24)
             ->forForecast([
                 'place_id' => 1,

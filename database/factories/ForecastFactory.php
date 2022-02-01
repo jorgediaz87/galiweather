@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Forecast;
+use App\Models\Place;
 
 class ForecastFactory extends Factory
 {

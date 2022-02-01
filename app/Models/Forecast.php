@@ -21,4 +21,19 @@ class Forecast extends Model
     {
         return $this->hasMany(SkyState::class);
     }
+
+    public function temperature()
+    {
+        return $this->hasMany(Temperature::class);
+    }
+
+    public function precipitation()
+    {
+        return $this->hasMany(Precipitation::class);
+    }
+
+    public function wind()
+    {
+        return $this->hasMany(Wind::class);
+    }
 }

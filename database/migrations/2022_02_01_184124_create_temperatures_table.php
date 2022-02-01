@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateForecastsTable extends Migration
+class CreateTemperaturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateForecastsTable extends Migration
      */
     public function up()
     {
-        Schema::create('forecasts', function (Blueprint $table) {
+        Schema::create('temperatures', function (Blueprint $table) {
             $table->id();
-            $table->timestampTz('begin_at');
-            $table->timestampTz('end_at');
+            $table->timestampTz('time_instant');
+            $table->timestampTz('model_run_at');
+            $table->integer('value');
             $table->timestamps();
         });
 
-        Schema::table('forecasts', function (Blueprint $table) {
-            $table->foreignId('place_id')
+        Schema::table('temperatures', function (Blueprint $table) {
+            $table->foreignId('forecast_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -35,11 +36,11 @@ class CreateForecastsTable extends Migration
      */
     public function down()
     {
-        Schema::table('forecasts', function (Blueprint $table) {
-            $table->dropForeign(['place_id']);
+        Schema::table('temperatures', function (Blueprint $table) {
+            $table->dropForeign(['forecast_id']);
+
         });
 
-        Schema::dropIfExists('forecasts');
-
+        Schema::dropIfExists('temperatures');
     }
 }

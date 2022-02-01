@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Wind extends Model
+{
+    use HasFactory;
+
+    /**
+     * Get the forecast for one wind.
+     */
+    public function forecast()
+    {
+        return $this->belongsTo(Forecast::class);
+    }
+}

@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Place;
+
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Place;
 
 class PlaceFactory extends Factory
 {

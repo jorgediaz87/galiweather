@@ -23,6 +23,17 @@ class CreatePlacesTable extends Migration
             $table->enum('type', ['beach', 'locality']);
             $table->timestamps();
         });
+
+        Schema::table('places', function (Blueprint $table) {
+            $table->foreignId('port_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('reference_port_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+        });
     }
 
     /**
@@ -32,6 +43,11 @@ class CreatePlacesTable extends Migration
      */
     public function down()
     {
+        Schema::table('places', function (Blueprint $table) {
+            $table->dropForeign(['port_id']);
+            $table->dropForeign(['reference_port_id']);
+        });
+
         Schema::dropIfExists('places');
     }
 }

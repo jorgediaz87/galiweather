@@ -22,11 +22,9 @@ class ReferencePortFactory extends Factory
      */
     public function definition()
     {
-        return [
             return [
                 'identifier' => $this->faker->numberBetween(1, 20),
                 'name' => $this->faker->city,
             ];
-        ];
     }
 }

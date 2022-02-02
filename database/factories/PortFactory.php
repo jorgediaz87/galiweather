@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 use App\Models\Port;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PortFactory extends Factory
 {
@@ -14,6 +14,7 @@ class PortFactory extends Factory
      * @var string
      */
     protected $model = Port::class;
+
     /**
      * Define the model's default state.
      *

@@ -16,4 +16,20 @@ class Place extends Model
     {
         return $this->hasMany(Forecast::class);
     }
+
+    /**
+     * Get the port that owns the place.
+     */
+    public function port()
+    {
+        return $this->belongsTo(Port::class);
+    }
+
+    /**
+     * Get the port that owns the place.
+     */
+    public function referencePort()
+    {
+        return $this->belongsTo(ReferencePort::class);
+    }
 }

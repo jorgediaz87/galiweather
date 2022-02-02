@@ -17,23 +17,43 @@ class Forecast extends Model
         return $this->belongsTo(Place::class);
     }
 
-    public function skyState()
+    /**
+     * Get the sky states for the forecast.
+     */
+    public function skyStates()
     {
         return $this->hasMany(SkyState::class);
     }
 
-    public function temperature()
+    /**
+     * Get the temperatures for the forecast.
+     */
+    public function temperatures()
     {
         return $this->hasMany(Temperature::class);
     }
 
-    public function precipitation()
+    /**
+     * Get the precipitations for the forecast.
+     */
+    public function precipitations()
     {
         return $this->hasMany(Precipitation::class);
     }
 
-    public function wind()
+    /**
+     * Get the winds for the forecast.
+     */
+    public function winds()
     {
         return $this->hasMany(Wind::class);
+    }
+
+    /**
+     * Get the solar info associated with the forecast.
+     */
+    public function solarInfo()
+    {
+        return $this->hasOne(SolarInfo::class);
     }
 }

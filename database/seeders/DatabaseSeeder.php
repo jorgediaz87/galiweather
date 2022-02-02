@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             WindSeeder::class,
             TideForecastSeeder::class,
             TideSeeder::class,
+            SolarInfoSeeder::class
         ]);
     }
 }

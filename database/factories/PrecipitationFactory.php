@@ -5,9 +5,17 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Forecast;
+use App\Models\Precipitation;
 
 class PrecipitationFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Precipitation::class;
+
     /**
      * Define the model's default state.
      *

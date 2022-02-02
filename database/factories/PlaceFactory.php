@@ -26,8 +26,6 @@ class PlaceFactory extends Factory
      */
     public function definition()
     {
-        $portsIdentifiers = [1,2,4,6,7,8,9,10,11,12,13,14,15,16];
-        $referencePortsIdentifiers = [1,2,3,4,10,14,15,16];
 
         return [
             'name' => $this->faker->city,
@@ -35,10 +33,9 @@ class PlaceFactory extends Factory
             'province' => $this->faker->randomElement(['A Coruña', 'Lugo', 'Ourense', 'Pontevedra']),
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
-            'port_id' => array_rand($portsIdentifiers, 1),
-            // 'port_id' => Port::factory(), TODO: uncomment when found how to seed uniques
-            'reference_port_id' => array_rand($referencePortsIdentifiers, 1),
-            // 'reference_port_id' => ReferencePort::factory(), TODO: uncomment when found how to seed uniques
+            // 'port_id' => $portsIdentifiers[array_rand($portsIdentifiers, 1)],
+            'port_id' => Port::factory(),
+            'reference_port_id' => ReferencePort::factory(),
             'type' => $this->faker->randomElement(['beach', 'locality']),
         ];
     }

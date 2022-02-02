@@ -22,8 +22,11 @@ class PortFactory extends Factory
      */
     public function definition()
     {
+
+        $portsIdentifiers = [1,2,4,6,7,8,9,10,11,12,13,14,15,16];
+
         return [
-            'identifier' => $this->faker->numberBetween(1, 20),
+            'identifier' => $portsIdentifiers[array_rand($portsIdentifiers, 1)],
             'name' => $this->faker->city,
         ];
     }

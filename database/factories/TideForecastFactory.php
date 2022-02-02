@@ -4,16 +4,18 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\ReferencePort;
+use App\Models\TideForecast;
+use App\Models\Place;
 
-class ReferencePortFactory extends Factory
+class TideForecastFactory extends Factory
 {
+
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ReferencePort::class;
+    protected $model = TideForecast::class;
 
     /**
      * Define the model's default state.
@@ -22,11 +24,10 @@ class ReferencePortFactory extends Factory
      */
     public function definition()
     {
-        $referencePortsIdentifiers = [1,2,3,4,10,14,15,16];
-
         return [
-            'identifier' => $referencePortsIdentifiers[array_rand($referencePortsIdentifiers, 1)],
-            'name' => $this->faker->city,
+            'place_id' => Place::factory(),
+            'begin_at' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
+            'end_at' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
         ];
     }
 }

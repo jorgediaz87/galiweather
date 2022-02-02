@@ -10,14 +10,6 @@ class Place extends Model
     use HasFactory;
 
     /**
-     * Get the forecasts for one place.
-     */
-    public function forecasts()
-    {
-        return $this->hasMany(Forecast::class);
-    }
-
-    /**
      * Get the port that owns the place.
      */
     public function port()
@@ -32,4 +24,21 @@ class Place extends Model
     {
         return $this->belongsTo(ReferencePort::class);
     }
+
+    /**
+     * Get the forecasts for one place.
+     */
+    public function forecasts()
+    {
+        return $this->hasMany(Forecast::class);
+    }
+
+    /**
+     * Get the tide forecasts for one place.
+     */
+    public function tideForecasts()
+    {
+        return $this->hasMany(Forecast::class);
+    }
+
 }

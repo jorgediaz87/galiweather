@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\GetPlaces;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,6 +16,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $alphas = range('A', 'B');
+        foreach ($alphas as $alpha) {
+            $schedule->command('get:place' . $a)->daily(); 
+        }
+          
         // $schedule->command('inspire')->hourly();
     }
 

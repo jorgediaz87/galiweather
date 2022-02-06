@@ -60,6 +60,18 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        'places' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/places.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
+        'tides' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/tides.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),

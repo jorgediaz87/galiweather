@@ -26,10 +26,12 @@ class CreatePlacesTable extends Migration
 
         Schema::table('places', function (Blueprint $table) {
             $table->foreignId('port_id')
+                ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->foreignId('reference_port_id')
+                ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

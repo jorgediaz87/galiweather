@@ -41,24 +41,25 @@ class GetPlaces extends Command
      */
     public function handle()
     {
-        Log::info('Requesting place in scheduled task');
+        Log::channel('places')->info('Requesting places...');
         $location = $this->argument('location');
         $url = env('API_URL') . 'findPlaces?location='.$location.'&lang=en&format=application/json&exceptionsFormat=application/json&API_KEY=' . env('API_KEY');
         $request = Http::get($url);
         $response = $request->json();
-
         foreach ($response['features'] as $feature) {
             $place = new Place();
             $place->name = $feature['properties']['name'];
             $place->municipality = $feature['properties']['municipality'];
             $place->province = $feature['properties']['province'];
             $place->type = $feature['properties']['type'];
-            $place->port_id = 4;
-            $place->reference_port_id = 2;
+            $place->port_id = null;
+            $place->reference_port_id = null;
             $place->latitude= $feature['geometry']['coordinates'][0];
             $place->longitude = $feature['geometry']['coordinates'][1];
             $place->save();
-            $this->info($place->toJson());
+            Log::channel('places')->notice("Created a new place with the following info: " . print_r($place->toArray(), true));
         }
+        Log::channel('places')->info('All places created successfully');
+        $this->info('All Done!');
     }
 }

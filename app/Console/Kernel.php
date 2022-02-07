@@ -16,12 +16,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $alphas = range('A', 'B');
-        foreach ($alphas as $alpha) {
-            $schedule->command('get:place' . $a)->daily(); 
+        $alphabet = range('A', 'B');
+        foreach ($alphas as $letter) {
+            $schedule->command('get:place ' . $letter)->daily();
+            $schedule->command('get:forecast')->daily();
+            $schedule->command('get:tides')->daily();
+
         }
-          
-        // $schedule->command('inspire')->hourly();
     }
 
     /**

@@ -47,13 +47,11 @@ class GetPlaces extends Command
         $request = Http::get($url);
         $response = $request->json();
         foreach ($response['features'] as $feature) {
-            $place = Place::create([
+            $place = Place::firstOrCreate([
                 'name' => $feature['properties']['name'],
                 'municipality' => $feature['properties']['municipality'],
                 'province' => $feature['properties']['province'],
                 'type' => $feature['properties']['type'],
-                'port_id' => null,
-                'reference_port_id' => null,
                 'latitude' => $feature['geometry']['coordinates'][0],
                 'longitude' => $feature['geometry']['coordinates'][1]
             ]);

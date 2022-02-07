@@ -9,6 +9,8 @@ class Forecast extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['place_id', 'begin_at', 'end_at'];
+
     /**
      * Get the place for one forecast.
      */

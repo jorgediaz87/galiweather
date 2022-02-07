@@ -66,6 +66,12 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        'forecast' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/forecast.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
         'tides' => [
             'driver' => 'single',
             'path' => storage_path('logs/tides.log'),

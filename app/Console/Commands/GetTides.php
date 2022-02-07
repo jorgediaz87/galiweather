@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\Place;
+use App\Models\Forecast;
 use App\Models\Port;
 use App\Models\ReferencePort;
 use App\Models\Tide;
-use App\Models\TideForecast;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -62,23 +62,22 @@ class GetTides extends Command
             }
 
             $days = $response['features'][0]['properties']['days'];
-            Log::channel('tides')->info('Storing a new tide forecast for '. count($days) .' days for the location ' . $place->name . '...');
-            foreach ($days as $day) {
-                $tideForecast = new TideForecast();
-                $tideForecast->place_id = $place->id;
-                $tideForecast->begin_at = Carbon::parse($day['timePeriod']['begin']['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s');
-                $tideForecast->end_at =Carbon::parse($day['timePeriod']['end']['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s');
-                $tideForecast->save();
-                Log::channel('tides')->info('Stored a new tide forecast for the period between '. $tideForecast->begin_at .' and ' . $tideForecast->end_at . '...');
+            Log::channel('tides')->info('Storing a new tide forecast for ' . count($days) . ' days for the location ' . $place->name . '...');
 
-                Log::channel('tides')->info('Creating a new tide for the location ' . $place->name . ' and the tide forecast ' .  $tideForecast->id . '...');
+            foreach ($days as $day) {
+                $forecast = Forecast::whereDate('begin_at', '=', Carbon::parse($day['timePeriod']['begin']['timeInstant'])->setTimezone('UTC')->format('Y-m-d'))
+                    ->whereDate('end_at', '=', Carbon::parse($day['timePeriod']['end']['timeInstant'])->setTimezone('UTC')->format('Y-m-d'))
+                    ->where('place_id', '=', $place->id)
+                    ->firstOrFail();
+                Log::channel('tides')->info('Retriving the forecast for the period between ' . $forecast->begin_at . ' and ' . $forecast->end_at . '...');
+                Log::channel('tides')->info('Creating a new tide for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
                 foreach ($day['variables'][0]['summary'] as $summary) {
-                    $tide = new Tide();
-                    $tide->time_instant = Carbon::parse($summary['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s');
-                    $tide->state = $summary['state'];
-                    $tide->height = $summary['height'];
-                    $tide->tide_forecast_id = $tideForecast->id;
-                    $tide->save();
+                    Tide::create([
+                        'forecast_id' => $forecast->id,
+                        'time_instant' => Carbon::parse($summary['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
+                        'state' => $summary['state'],
+                        'height' => $summary['height']
+                    ]);
                 }
             }
         }

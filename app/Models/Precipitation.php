@@ -9,6 +9,8 @@ class Precipitation extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['forecast_id', 'time_instant', 'model_run_at', 'value'];
+
     /**
      * Get the forecast for one precipitation.
      */

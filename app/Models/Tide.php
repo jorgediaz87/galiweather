@@ -9,6 +9,8 @@ class Tide extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['forecast_id', 'time_instant', 'state', 'height'];
+
     /**
      * Get the forecast for one tide.
      */

@@ -16,7 +16,7 @@ class TideSeeder extends Seeder
     public function run()
     {
         Tide::factory()
-        ->times(1)
-        ->create();
+            ->times(1)
+            ->create();
     }
 }

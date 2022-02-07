@@ -27,7 +27,7 @@ class CreateTidesTable extends Migration
 
 
         Schema::table('tides', function (Blueprint $table) {
-            $table->foreignId('tide_forecast_id')
+            $table->foreignId('forecast_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -42,7 +42,7 @@ class CreateTidesTable extends Migration
     public function down()
     {
         Schema::table('tides', function (Blueprint $table) {
-            $table->dropForeign(['tide_forecast_id']);
+            $table->dropForeign(['forecast_id']);
         });
 
         Schema::dropIfExists('tides');

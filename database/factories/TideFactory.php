@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\TideForecast;
+use App\Models\Forecast;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,7 +16,7 @@ class TideFactory extends Factory
     public function definition()
     {
         return [
-            'tide_forecast_id' => TideForecast::factory(),
+            'forecast_id' => Forecast::factory(),
             'time_instant' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
             'state' => $this->faker->randomElement(
                 [

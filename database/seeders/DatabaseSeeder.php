@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             TemperatureSeeder::class,
             PrecipitationSeeder::class,
             WindSeeder::class,
-            TideForecastSeeder::class,
             TideSeeder::class,
             SolarInfoSeeder::class
         ]);

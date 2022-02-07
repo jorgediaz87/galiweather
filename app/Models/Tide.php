@@ -10,10 +10,11 @@ class Tide extends Model
     use HasFactory;
 
     /**
-     * Get the tide forecast for one tide.
+     * Get the forecast for one tide.
      */
-    public function tideForecast()
+
+    public function forecast()
     {
-        return $this->belongsTo(TideForecast::class);
+        return $this->belongsTo(Forecast::class);
     }
 }

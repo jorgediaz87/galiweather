@@ -18,8 +18,8 @@ class CreatePlacesTable extends Migration
             $table->string('name');
             $table->string('municipality');
             $table->enum('province', ['A Coruña', 'Lugo', 'Ourense', 'Pontevedra']);
-            $table->float('latitude');
-            $table->float('longitude');
+            $table->float('latitude', 12, 6);
+            $table->float('longitude', 12, 6);
             $table->enum('type', ['beach', 'locality']);
             $table->timestamps();
         });

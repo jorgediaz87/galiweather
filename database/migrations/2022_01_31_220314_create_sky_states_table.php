@@ -19,7 +19,7 @@ class CreateSkyStatesTable extends Migration
             $table->timestampTz('model_run_at');
             $table->enum('value',
                 [
-                    'SUNNY', 'HIGH_CLOUDS,', 'PARTLY_CLOUDY,',
+                    'SUNNY', 'HIGH_CLOUDS', 'PARTLY_CLOUDY',
                     'OVERCAST', 'CLOUDY', 'FOG', 'SHOWERS',
                     'OVERCAST_AND_SHOWERS', 'INTERMITENT_SNOW',
                     'RAIN','SNOW','STORMS','MIST','FOG_BANK','MID_CLOUDS',

@@ -13,7 +13,7 @@ class PlaceController extends BaseController
     public function index()
     {
         $places = Place::all();
-        return $this->sendResponse(PlaceResource::collection($places), 'Posts fetched.');
+        return $this->sendResponse(PlaceResource::collection($places), 'Places fetched.');
     }
 
     public function store(Request $request)

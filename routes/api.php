@@ -19,7 +19,10 @@ use App\Http\Controllers\API\PlaceController;
 
 Route::post('login', [AuthController::class, 'signin']);
 Route::post('register', [AuthController::class, 'signup']);
+Route::get('places', [PlaceController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::middleware('auth:sanctum')->get('/places', [PlaceController::class, 'index']);

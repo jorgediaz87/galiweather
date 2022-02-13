@@ -23,7 +23,8 @@ class CreateSkyStatesTable extends Migration
                     'OVERCAST', 'CLOUDY', 'FOG', 'SHOWERS',
                     'OVERCAST_AND_SHOWERS', 'INTERMITENT_SNOW',
                     'RAIN','SNOW','STORMS','MIST','FOG_BANK','MID_CLOUDS',
-                    'WEAK_RAIN','WEAK_SHOWERS','STORM_THEN_CLOUDY','MELTED_SNOW'
+                    'WEAK_RAIN','WEAK_SHOWERS','STORM_THEN_CLOUDY','MELTED_SNOW',
+                    'DRIZZLE'
                 ]
             );
             $table->timestamps();

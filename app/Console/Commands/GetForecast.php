@@ -4,10 +4,13 @@ namespace App\Console\Commands;
 
 use App\Models\Place;
 use App\Models\Forecast;
-use App\Models\SkyState;
-use App\Models\Temperature;
-use App\Models\Precipitation;
-use App\Models\Wind;
+
+use App\Services\CreateForecastService;
+use App\Services\CreatePrecipitationService;
+use App\Services\CreateSkyStateService;
+use App\Services\CreateTemperatureService;
+use App\Services\CreateWindService;
+use App\Services\MeteoSixApiService;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -36,10 +39,27 @@ class GetForecast extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(
+        CreateSkyStateService $createSkyStateService,
+        CreateTemperatureService $createTemperatureService,
+        CreatePrecipitationService $createPrecipitationService,
+        CreateWindService $createWindService,
+        CreateForecastService $createForecastService,
+        MeteoSixApiService $meteoSixApiService
+    )
     {
         parent::__construct();
+
+        $this->createSkyStateService = $createSkyStateService;
+        $this->createTemperatureService = $createTemperatureService;
+        $this->createPrecipitationService = $createPrecipitationService;
+        $this->createWindService = $createWindService;
+        $this->createForecastService = $createForecastService;
+        $this->meteoSixApiService = $meteoSixApiService;
     }
+
+
+
 
     /**
      * Execute the console command.
@@ -51,59 +71,32 @@ class GetForecast extends Command
         Log::channel('forecast')->info('Generating the weather forecast for the current stored locations in DB...');
         $places = Place::all();
         foreach ($places as $place) {
-            $request = Http::get(env('API_URL') . 'getNumericForecastInfo?coords=' . $place->latitude . ',' . $place->longitude . '&format=application/json&tz=UTC&API_KEY=' . env('API_KEY'));
-            $response = $request->json();
+            $response = $this->meteoSixApiService::getForecast($place->latitude, $place->longitude);
             $days = $response['features'][0]['properties']['days'];
             Log::channel('forecast')->info('Storing forecasts for ' . count($days) . ' days for the location ' . $place->name . '...');
             foreach ($days as $day) {
-                $forecast = Forecast::create([
-                    'place_id' => $place->id,
-                    'begin_at' => Carbon::parse($day['timePeriod']['begin']['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                    'end_at' =>Carbon::parse($day['timePeriod']['end']['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s')
-                ]);
-                Log::channel('tides')->info('Stored a forecast for the period between ' . $forecast->begin_at . ' and ' . $forecast->end_at . '...');
-                Log::channel('tides')->info('Creating a new wheather forecast for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
+                $forecast = $this->createForecastService->create($place, $day);
+                Log::channel('forecast')->info('Creating a new wheather forecast for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
                 foreach ($day['variables'] as $property) {
                     switch ($property['name']) {
                         case 'sky_state':
                             foreach ($property['values'] as $hourlyValue) {
-                                SkyState::create([
-                                    'forecast_id' => $forecast->id,
-                                    'time_instant' => Carbon::parse($hourlyValue['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'model_run_at' => Carbon::parse($hourlyValue['modelRun'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'value' => $hourlyValue['value'],
-                                ]);
+                                $this->createSkyStateService::create($forecast, $hourlyValue);
                             }
                             break;
                         case 'temperature':
                             foreach ($property['values'] as $hourlyValue) {
-                                Temperature::create([
-                                    'forecast_id' => $forecast->id,
-                                    'time_instant' => Carbon::parse($hourlyValue['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'model_run_at' => Carbon::parse($hourlyValue['modelRun'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'value' => $hourlyValue['value'],
-                                ]);
+                                $this->createTemperatureService::create($forecast, $hourlyValue);
                             }
                             break;
                         case 'precipitation_amount':
                             foreach ($property['values'] as $hourlyValue) {
-                                Precipitation::create([
-                                    'forecast_id' => $forecast->id,
-                                    'time_instant' => Carbon::parse($hourlyValue['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'model_run_at' => Carbon::parse($hourlyValue['modelRun'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'value' => $hourlyValue['value'],
-                                ]);
+                                $this->createPrecipitationService::create($forecast, $hourlyValue);
                             }
                             break;
                         case 'wind':
                             foreach ($property['values'] as $hourlyValue) {
-                                Wind::create([
-                                    'forecast_id' => $forecast->id,
-                                    'time_instant' => Carbon::parse($hourlyValue['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'model_run_at' => Carbon::parse($hourlyValue['modelRun'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                                    'model_value' => $hourlyValue['moduleValue'],
-                                    'direction_value' => $hourlyValue['directionValue'],
-                                ]);
+                                $this->createWindService::create($forecast, $hourlyValue);
                             }
                             break;
                     }

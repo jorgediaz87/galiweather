@@ -20,7 +20,6 @@ class CreateReferencePortsTable extends Migration
             $table->tinyInteger('identifier')->unsigned();
                 // ->unique(); TODO: uncomment when found how to seed uniques
             $table->string('name');
-            $table->timestamps();
         });
     }
 

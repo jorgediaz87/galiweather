@@ -9,6 +9,7 @@ class Tide extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $fillable = ['forecast_id', 'time_instant', 'state', 'height'];
 
     /**

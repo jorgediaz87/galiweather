@@ -9,6 +9,8 @@ class ReferencePort extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     /**
      * Get the places for the reference port.
      */

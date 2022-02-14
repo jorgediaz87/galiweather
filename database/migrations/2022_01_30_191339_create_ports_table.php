@@ -22,7 +22,6 @@ class CreatePortsTable extends Migration
                 ->unsigned();
                 // ->unique(); TODO: uncomment when found how to seed uniques
             $table->string('name');
-            $table->timestamps();
         });
     }
 

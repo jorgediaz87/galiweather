@@ -27,7 +27,6 @@ class CreateSkyStatesTable extends Migration
                     'DRIZZLE'
                 ]
             );
-            $table->timestamps();
         });
 
 

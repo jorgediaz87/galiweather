@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SolarInfo extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+
+    protected $fillable = ['forecast_id', 'sunrise', 'midday', 'sunset', 'duration'];
 
     /**
      * Get the forecast for solar info.

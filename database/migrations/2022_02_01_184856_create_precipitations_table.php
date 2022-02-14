@@ -18,7 +18,6 @@ class CreatePrecipitationsTable extends Migration
             $table->timestampTz('time_instant');
             $table->timestampTz('model_run_at');
             $table->integer('value');
-            $table->timestamps();
         });
 
         Schema::table('precipitations', function (Blueprint $table) {

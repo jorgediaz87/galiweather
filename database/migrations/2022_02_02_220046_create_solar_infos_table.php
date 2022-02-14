@@ -19,7 +19,6 @@ class CreateSolarInfosTable extends Migration
             $table->time('midday');
             $table->time('sunset');
             $table->string('duration');
-            $table->timestamps();
         });
 
         Schema::table('solar_infos', function (Blueprint $table) {

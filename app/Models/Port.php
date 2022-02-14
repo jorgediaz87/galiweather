@@ -9,6 +9,8 @@ class Port extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     /**
      * Get the places for the port.
      */

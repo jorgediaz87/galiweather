@@ -22,7 +22,6 @@ class CreateTidesTable extends Migration
                 ]
             );
             $table->float('height');
-            $table->timestamps();
         });
 
 

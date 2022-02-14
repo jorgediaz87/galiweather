@@ -9,6 +9,7 @@ class Wind extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $fillable = ['forecast_id', 'time_instant', 'model_run_at', 'model_value', 'direction_value'];
 
     /**

@@ -20,7 +20,6 @@ class CreateWindsTable extends Migration
             $table->timestampTz('model_run_at');
             $table->float('model_value');
             $table->float('direction_value');
-            $table->timestamps();
         });
 
         Schema::table('winds', function (Blueprint $table) {

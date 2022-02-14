@@ -21,7 +21,6 @@ class CreatePlacesTable extends Migration
             $table->float('latitude', 12, 6);
             $table->float('longitude', 12, 6);
             $table->enum('type', ['beach', 'locality']);
-            $table->timestamps();
         });
 
         Schema::table('places', function (Blueprint $table) {

@@ -9,6 +9,7 @@ class Place extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $fillable = ['name', 'municipality', 'province', 'type', 'port_id', 'reference_port_id', 'latitude', 'longitude'];
     /**
      * Get the port that owns the place.

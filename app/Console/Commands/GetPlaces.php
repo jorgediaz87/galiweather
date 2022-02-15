@@ -3,11 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\Place;
-
+use App\Services\MeteoSixApiService;
+use App\Services\CreatePlaceService;
 
 
 class GetPlaces extends Command
@@ -31,9 +30,11 @@ class GetPlaces extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(MeteoSixApiService $meteoSixApiService, CreatePlaceService $createPlaceService)
     {
         parent::__construct();
+        $this->meteoSixApiService = $meteoSixApiService;
+        $this->createPlaceService = $createPlaceService;
     }
 
     /**
@@ -45,19 +46,9 @@ class GetPlaces extends Command
     {
         Log::channel('places')->info('Requesting places...');
         $location = $this->argument('location');
-        $url = env('API_URL') . 'findPlaces?location=' . $location . '&lang=en&format=application/json&exceptionsFormat=application/json&API_KEY=' . env('API_KEY');
-        $request = Http::get($url);
-        $response = $request->json();
-        foreach ($response['features'] as $feature) {
-            $place = Place::firstOrCreate([
-                'name' => $feature['properties']['name'],
-                'municipality' => $feature['properties']['municipality'],
-                'province' => $feature['properties']['province'],
-                'type' => $feature['properties']['type'],
-                'latitude' => $feature['geometry']['coordinates'][0],
-                'longitude' => $feature['geometry']['coordinates'][1]
-            ]);
-            Log::channel('places')->notice("Created a new place with the following info: " . print_r($place->toArray(), true));
+        $response = $this->meteoSixApiService::getPlaces($location);
+        foreach ($response['features'] as $location) {
+            $this->createPlaceService->create($location);
         }
         Log::channel('places')->info('All places created successfully');
         $this->info('All Done!');

@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Place;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+
+use App\Models\Place;
+
 
 
 class GetPlaces extends Command

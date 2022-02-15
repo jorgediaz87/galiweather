@@ -2,16 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Place;
-use App\Models\Forecast;
-use App\Models\Port;
-use App\Models\ReferencePort;
-use App\Models\Tide;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 use Carbon\Carbon;
+
+use App\Models\Place;
+use App\Models\Forecast;
+use App\Models\Port;
+use App\Models\ReferencePort;
+use App\Models\Tide;
 
 class GetTides extends Command
 {

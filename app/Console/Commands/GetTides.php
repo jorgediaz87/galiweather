@@ -3,16 +3,14 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-use Carbon\Carbon;
-
 use App\Models\Place;
-use App\Models\Forecast;
-use App\Models\Port;
-use App\Models\ReferencePort;
-use App\Models\Tide;
+
+use App\Services\MeteoSixApiService;
+use App\Services\CreateForecastService;
+use App\Services\CreatePlaceService;
+use App\Services\CreateTideService;
 
 class GetTides extends Command
 {
@@ -35,9 +33,13 @@ class GetTides extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(MeteoSixApiService $meteoSixApiService, CreatePlaceService $createPlaceService, CreateForecastService $createForecastService, CreateTideService $createTideService)
     {
         parent::__construct();
+        $this->meteoSixApiService = $meteoSixApiService;
+        $this->createForecastService = $createForecastService;
+        $this->createPlaceService = $createPlaceService;
+        $this->createTideService = $createTideService;
     }
 
     /**
@@ -50,37 +52,25 @@ class GetTides extends Command
         Log::channel('tides')->info('Assigning the ports and reference ports to the list of locations stored in the database...');
         $places = Place::all();
         foreach ($places as $place) {
-            $request = Http::get(env('API_URL') . 'getTidesInfo?coords=' . $place->latitude . ',' . $place->longitude . '&format=application/json&tz=UTC&API_KEY=' . env('API_KEY'));
-            $response = $request->json();
-            if (!$place->port_id && !$place->reference_port_id) {
-                Log::channel('tides')->info('Assinging port and reference port to ' . $place->name);
+            $response = $this->meteoSixApiService::getTides($place->latitude, $place->longitude);
+            if ($response) {
                 $portsInfo = $response['features'][0]['properties'];
-                $port = Port::where('identifier', '=', $portsInfo['port']['id'])->first();
-                $place->port_id = $port->id ?? null;
-                $referencePort = ReferencePort::where('identifier', '=', $portsInfo['referencePort']['id'])->first();
-                $place->reference_port_id = $referencePort->id;
-                $place->save();
-            }
-
-            $days = $response['features'][0]['properties']['days'];
-            Log::channel('tides')->info('Storing a new tide forecast for ' . count($days) . ' days for the location ' . $place->name . '...');
-
-            foreach ($days as $day) {
-                $forecast = Forecast::whereDate('begin_at', '=', Carbon::parse($day['timePeriod']['begin']['timeInstant'])->setTimezone('UTC')->format('Y-m-d'))
-                    ->whereDate('end_at', '=', Carbon::parse($day['timePeriod']['end']['timeInstant'])->setTimezone('UTC')->format('Y-m-d'))
-                    ->where('place_id', '=', $place->id)
-                    ->firstOrFail();
-                Log::channel('tides')->info('Retriving the forecast for the period between ' . $forecast->begin_at . ' and ' . $forecast->end_at . '...');
-                Log::channel('tides')->info('Creating a new tide for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
-                foreach ($day['variables'][0]['summary'] as $summary) {
-                    Tide::create([
-                        'forecast_id' => $forecast->id,
-                        'time_instant' => Carbon::parse($summary['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-                        'state' => $summary['state'],
-                        'height' => $summary['height']
-                    ]);
+                $portID = $portsInfo['port']['id'];
+                $referencePortID = $portsInfo['referencePort']['id'];
+                $this->createPlaceService::placeHasPorts($place, $portID, $referencePortID);
+                $days = $response['features'][0]['properties']['days'];
+                Log::channel('tides')->info('Storing a new tide forecast for ' . count($days) . ' days for the location ' . $place->name . '...');
+                foreach ($days as $day) {
+                    $beginAt = $day['timePeriod']['begin']['timeInstant'];
+                    $endAt = $day['timePeriod']['end']['timeInstant'];
+                    $forecast = $this->createForecastService::findByDateAndPlace($place, $beginAt, $endAt);
+                    Log::channel('tides')->info('Creating a new tide for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
+                    foreach ($day['variables'][0]['summary'] as $hour) {
+                        $this->createTideService::create($forecast->id, $hour);
+                    }
                 }
             }
+
         }
         $this->info('All Done!');
     }

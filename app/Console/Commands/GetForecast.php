@@ -75,7 +75,9 @@ class GetForecast extends Command
             $days = $response['features'][0]['properties']['days'];
             Log::channel('forecast')->info('Storing forecasts for ' . count($days) . ' days for the location ' . $place->name . '...');
             foreach ($days as $day) {
-                $forecast = $this->createForecastService->create($place, $day);
+                $beginAt = $day['timePeriod']['begin']['timeInstant'];
+                $endAt = $day['timePeriod']['end']['timeInstant'];
+                $forecast = $this->createForecastService::create($place, $beginAt, $endAt);
                 Log::channel('forecast')->info('Creating a new wheather forecast for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
                 foreach ($day['variables'] as $property) {
                     switch ($property['name']) {

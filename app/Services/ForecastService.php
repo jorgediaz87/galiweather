@@ -10,7 +10,7 @@ use App\Models\Forecast;
 
 use Carbon\Carbon;
 
-class CreateForecastService
+class ForecastService
 {
 
     /**

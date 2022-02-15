@@ -11,7 +11,7 @@ use App\Models\ReferencePort;
 
 
 
-class CreatePlaceService
+class PlaceService
 {
 
     /**

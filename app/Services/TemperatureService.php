@@ -9,7 +9,7 @@ use App\Models\Temperature;
 
 use Carbon\Carbon;
 
-class CreateTemperatureService
+class TemperatureService
 {
 
     /**

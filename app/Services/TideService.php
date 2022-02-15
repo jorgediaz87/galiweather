@@ -9,7 +9,7 @@ use App\Models\Tide;
 
 use Carbon\Carbon;
 
-class CreateTideService
+class TideService
 {
 
     /**

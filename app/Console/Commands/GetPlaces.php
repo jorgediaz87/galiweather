@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
 use App\Services\MeteoSixApiService;
-use App\Services\CreatePlaceService;
+use App\Services\PlaceService;
 
 
 class GetPlaces extends Command
@@ -30,11 +30,11 @@ class GetPlaces extends Command
      *
      * @return void
      */
-    public function __construct(MeteoSixApiService $meteoSixApiService, CreatePlaceService $createPlaceService)
+    public function __construct(MeteoSixApiService $meteoSixApiService, PlaceService $placeService)
     {
         parent::__construct();
         $this->meteoSixApiService = $meteoSixApiService;
-        $this->createPlaceService = $createPlaceService;
+        $this->placeService = $placeService;
     }
 
     /**
@@ -48,7 +48,7 @@ class GetPlaces extends Command
         $location = $this->argument('location');
         $response = $this->meteoSixApiService::getPlaces($location);
         foreach ($response['features'] as $location) {
-            $this->createPlaceService->create($location);
+            $this->placeService->create($location);
         }
         Log::channel('places')->info('All places created successfully');
         $this->info('All Done!');

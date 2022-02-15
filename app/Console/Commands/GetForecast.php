@@ -3,19 +3,15 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-use Carbon\Carbon;
-
 use App\Models\Place;
-use App\Models\Forecast;
 
-use App\Services\CreateForecastService;
-use App\Services\CreatePrecipitationService;
-use App\Services\CreateSkyStateService;
-use App\Services\CreateTemperatureService;
-use App\Services\CreateWindService;
+use App\Services\ForecastService;
+use App\Services\PrecipitationService;
+use App\Services\SkyStateService;
+use App\Services\TemperatureService;
+use App\Services\WindService;
 use App\Services\MeteoSixApiService;
 
 class GetForecast extends Command
@@ -40,21 +36,21 @@ class GetForecast extends Command
      * @return void
      */
     public function __construct(
-        CreateSkyStateService $createSkyStateService,
-        CreateTemperatureService $createTemperatureService,
-        CreatePrecipitationService $createPrecipitationService,
-        CreateWindService $createWindService,
-        CreateForecastService $createForecastService,
+        SkyStateService $skyStateService,
+        TemperatureService $temperatureService,
+        PrecipitationService $precipitationService,
+        WindService $windService,
+        ForecastService $forecastService,
         MeteoSixApiService $meteoSixApiService
     )
     {
         parent::__construct();
 
-        $this->createSkyStateService = $createSkyStateService;
-        $this->createTemperatureService = $createTemperatureService;
-        $this->createPrecipitationService = $createPrecipitationService;
-        $this->createWindService = $createWindService;
-        $this->createForecastService = $createForecastService;
+        $this->skyStateService = $skyStateService;
+        $this->temperatureService = $temperatureService;
+        $this->precipitationService = $precipitationService;
+        $this->windService = $windService;
+        $this->forecastService = $forecastService;
         $this->meteoSixApiService = $meteoSixApiService;
     }
 
@@ -77,28 +73,28 @@ class GetForecast extends Command
             foreach ($days as $day) {
                 $beginAt = $day['timePeriod']['begin']['timeInstant'];
                 $endAt = $day['timePeriod']['end']['timeInstant'];
-                $forecast = $this->createForecastService::create($place, $beginAt, $endAt);
+                $forecast = $this->forecastService::create($place, $beginAt, $endAt);
                 Log::channel('forecast')->info('Creating a new wheather forecast for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
                 foreach ($day['variables'] as $property) {
                     switch ($property['name']) {
                         case 'sky_state':
                             foreach ($property['values'] as $hourlyValue) {
-                                $this->createSkyStateService::create($forecast, $hourlyValue);
+                                $this->skyStateService::create($forecast, $hourlyValue);
                             }
                             break;
                         case 'temperature':
                             foreach ($property['values'] as $hourlyValue) {
-                                $this->createTemperatureService::create($forecast, $hourlyValue);
+                                $this->temperatureService::create($forecast, $hourlyValue);
                             }
                             break;
                         case 'precipitation_amount':
                             foreach ($property['values'] as $hourlyValue) {
-                                $this->createPrecipitationService::create($forecast, $hourlyValue);
+                                $this->precipitationService::create($forecast, $hourlyValue);
                             }
                             break;
                         case 'wind':
                             foreach ($property['values'] as $hourlyValue) {
-                                $this->createWindService::create($forecast, $hourlyValue);
+                                $this->windService::create($forecast, $hourlyValue);
                             }
                             break;
                     }

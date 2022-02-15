@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Place;
 
 use App\Services\MeteoSixApiService;
-use App\Services\CreateForecastService;
-use App\Services\CreatePlaceService;
-use App\Services\CreateTideService;
+use App\Services\ForecastService;
+use App\Services\PlaceService;
+use App\Services\TideService;
 
 class GetTides extends Command
 {
@@ -33,13 +33,13 @@ class GetTides extends Command
      *
      * @return void
      */
-    public function __construct(MeteoSixApiService $meteoSixApiService, CreatePlaceService $createPlaceService, CreateForecastService $createForecastService, CreateTideService $createTideService)
+    public function __construct(MeteoSixApiService $meteoSixApiService, PlaceService $placeService, ForecastService $forecastService, TideService $tideService)
     {
         parent::__construct();
         $this->meteoSixApiService = $meteoSixApiService;
-        $this->createForecastService = $createForecastService;
-        $this->createPlaceService = $createPlaceService;
-        $this->createTideService = $createTideService;
+        $this->forecastService = $forecastService;
+        $this->placeService = $placeService;
+        $this->tideService = $tideService;
     }
 
     /**
@@ -57,16 +57,16 @@ class GetTides extends Command
                 $portsInfo = $response['features'][0]['properties'];
                 $portID = $portsInfo['port']['id'];
                 $referencePortID = $portsInfo['referencePort']['id'];
-                $this->createPlaceService::placeHasPorts($place, $portID, $referencePortID);
+                $this->placeService::placeHasPorts($place, $portID, $referencePortID);
                 $days = $response['features'][0]['properties']['days'];
                 Log::channel('tides')->info('Storing a new tide forecast for ' . count($days) . ' days for the location ' . $place->name . '...');
                 foreach ($days as $day) {
                     $beginAt = $day['timePeriod']['begin']['timeInstant'];
                     $endAt = $day['timePeriod']['end']['timeInstant'];
-                    $forecast = $this->createForecastService::findByDateAndPlace($place, $beginAt, $endAt);
+                    $forecast = $this->forecastService::findByDateAndPlace($place, $beginAt, $endAt);
                     Log::channel('tides')->info('Creating a new tide for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
                     foreach ($day['variables'][0]['summary'] as $hour) {
-                        $this->createTideService::create($forecast->id, $hour);
+                        $this->tideService::create($forecast->id, $hour);
                     }
                 }
             }

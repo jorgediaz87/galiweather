@@ -9,7 +9,7 @@ use App\Models\Precipitation;
 
 use Carbon\Carbon;
 
-class CreatePrecipitationService
+class PrecipitationService
 {
 
     /**

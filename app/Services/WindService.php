@@ -9,7 +9,7 @@ use App\Models\Wind;
 
 use Carbon\Carbon;
 
-class CreateWindService
+class WindService
 {
 
     /**

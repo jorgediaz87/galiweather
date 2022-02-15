@@ -9,7 +9,7 @@ use App\Models\SkyState;
 
 use Carbon\Carbon;
 
-class CreateSkyStateService
+class SkyStateService
 {
 
     /**

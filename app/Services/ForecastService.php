@@ -21,8 +21,8 @@ class ForecastService
      **/
     public static function create(Place $place, string $beginAt, string $endAt): Forecast
     {
-        $parsedBeginAt = Carbon::parse($beginAt)->setTimezone('UTC')->format('Y-m-d H:i:s');
-        $parsedEndAt = Carbon::parse($endAt)->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $parsedBeginAt = Carbon::parse($beginAt)->format('Y-m-d H:i:s');
+        $parsedEndAt = Carbon::parse($endAt)->format('Y-m-d H:i:s');
 
         $forecast = Forecast::create([
             'place_id' => $place->id,
@@ -46,9 +46,8 @@ class ForecastService
      **/
     public static function findByDateAndPlace(Place $place, string $beginAt, string $endAt)
     {
-
-        $parsedBeginAt = Carbon::parse($beginAt)->setTimezone('UTC')->format('Y-m-d');
-        $parsedEndAt = Carbon::parse($endAt)->setTimezone('UTC')->format('Y-m-d');
+        $parsedBeginAt = Carbon::parse($beginAt)->format('Y-m-d');
+        $parsedEndAt = Carbon::parse($endAt)->format('Y-m-d');
 
         try {
             $forecast = Forecast::whereDate('begin_at', '=', $parsedBeginAt)

@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Validator;
+
 use App\Models\Place;
-use App\Http\Resources\Place as PlaceResource;
+use App\Http\Resources\PlaceResource;
 
 class PlaceController extends BaseController
 {
     public function index()
     {
         $places = Place::all();
+        Log::channel('forecasts')->info('Places fetched: ');
         return $this->sendResponse(PlaceResource::collection($places), 'Places fetched.');
     }
 

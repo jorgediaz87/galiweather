@@ -22,7 +22,7 @@ class TideService
     {
         $tide = Tide::create([
             'forecast_id' => $forecastID,
-            'time_instant' => Carbon::parse($hour['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
+            'time_instant' => Carbon::parse($hour['timeInstant'])->format('Y-m-d H:i:s'),
             'state' => $hour['state'],
             'height' => $hour['height']
         ]);

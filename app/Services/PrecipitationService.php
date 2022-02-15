@@ -23,8 +23,8 @@ class PrecipitationService
     {
         $precipitation = Precipitation::create([
             'forecast_id' => $forecast->id,
-            'time_instant' => Carbon::parse($hourlyValue['timeInstant'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
-            'model_run_at' => Carbon::parse($hourlyValue['modelRun'])->setTimezone('UTC')->format('Y-m-d H:i:s'),
+            'time_instant' => Carbon::parse($hourlyValue['timeInstant'])->format('Y-m-d H:i:s'),
+            'model_run_at' => Carbon::parse($hourlyValue['modelRun'])->format('Y-m-d H:i:s'),
             'value' => $hourlyValue['value'],
         ]);
 

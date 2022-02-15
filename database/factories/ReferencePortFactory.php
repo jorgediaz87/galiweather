@@ -25,7 +25,7 @@ class ReferencePortFactory extends Factory
         $referencePortsIdentifiers = [1,2,3,4,10,14,15,16];
 
         return [
-            'identifier' => $referencePortsIdentifiers[array_rand($referencePortsIdentifiers, 1)],
+            'id' => $referencePortsIdentifiers[array_rand($referencePortsIdentifiers, 1)],
             'name' => $this->faker->city,
         ];
     }

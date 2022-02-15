@@ -17,10 +17,6 @@ class CreatePortsTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
             $table->id();
-            $table
-                ->tinyInteger('identifier')
-                ->unsigned();
-                // ->unique(); TODO: uncomment when found how to seed uniques
             $table->string('name');
         });
     }

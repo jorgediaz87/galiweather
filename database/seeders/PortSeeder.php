@@ -16,59 +16,59 @@ class PortSeeder extends Seeder
     {
         $ports = [
             [
-                'identifier' => 1,
+                'id' => 1,
                 'name' => 'A Coruña',
             ],
             [
-                'identifier' => 3,
+                'id' => 3,
                 'name' => 'Vigo',
             ],
             [
-                'identifier' => 4,
+                'id' => 4,
                 'name' => 'Vilagarcía',
             ],
             [
-                'identifier' => 6,
+                'id' => 6,
                 'name' => 'Ría de Foz',
             ],
             [
-                'identifier' => 7,
+                'id' => 7,
                 'name' => 'Corcubión',
             ],
             [
-                'identifier' => 8,
+                'id' => 8,
                 'name' => 'Ría de Camariñas',
             ],
             [
-                'identifier' => 9,
+                'id' => 9,
                 'name' => 'Ría de Corme',
             ],
             [
-                'identifier' => 10,
+                'id' => 10,
                 'name' => 'A Guarda',
             ],
             [
-                'identifier' => 11,
-                'name' => 'A Guarda',
+                'id' => 11,
+                'name' => 'Ribeira',
             ],
             [
-                'identifier' => 12,
+                'id' => 12,
                 'name' => 'Muros',
             ],
             [
-                'identifier' => 13,
+                'id' => 13,
                 'name' => 'Pontevedra',
             ],
             [
-                'identifier' => 14,
+                'id' => 14,
                 'name' => 'Ferrol puerto exterior',
             ],
             [
-                'identifier' => 15,
+                'id' => 15,
                 'name' => 'Marín',
             ],
             [
-                'identifier' => 16,
+                'id' => 16,
                 'name' => 'Ferrol',
             ],
         ];

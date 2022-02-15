@@ -16,35 +16,35 @@ class ReferencePortSeeder extends Seeder
     {
         $referencePorts = [
             [
-                'identifier' => 1,
+                'id' => 1,
                 'name' => 'A Coruña',
             ],
             [
-                'identifier' => 2,
+                'id' => 2,
                 'name' => 'Xixón',
             ],
             [
-                'identifier' => 3,
+                'id' => 3,
                 'name' => 'Vigo',
             ],
             [
-                'identifier' => 4,
+                'id' => 4,
                 'name' => 'Vilagarcía',
             ],
             [
-                'identifier' => 10,
+                'id' => 10,
                 'name' => 'A Guarda',
             ],
             [
-                'identifier' => 14,
+                'id' => 14,
                 'name' => 'Ferrol puerto exterior',
             ],
             [
-                'identifier' => 15,
+                'id' => 15,
                 'name' => 'Marín',
             ],
             [
-                'identifier' => 16,
+                'id' => 16,
                 'name' => 'Ferrol',
             ],
         ];

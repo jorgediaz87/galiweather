@@ -12,6 +12,13 @@ class ReferencePort extends Model
     public $timestamps = false;
 
     /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * Get the places for the reference port.
      */
     public function places()

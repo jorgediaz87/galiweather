@@ -61,9 +61,8 @@ class GetTides extends Command
                 $days = $response['features'][0]['properties']['days'];
                 Log::channel('tides')->info('Storing a new tide forecast for ' . count($days) . ' days for the location ' . $place->name . '...');
                 foreach ($days as $day) {
-                    $beginAt = $day['timePeriod']['begin']['timeInstant'];
                     $endAt = $day['timePeriod']['end']['timeInstant'];
-                    $forecast = $this->forecastService::findByDateAndPlace($place, $beginAt, $endAt);
+                    $forecast = $this->forecastService::findOneByDateAndPlace($place, $endAt);
                     Log::channel('tides')->info('Creating a new tide for the location ' . $place->name . ' and the forecast ' . $forecast->id . '...');
                     foreach ($day['variables'][0]['summary'] as $hour) {
                         $this->tideService::create($forecast->id, $hour);

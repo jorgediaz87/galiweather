@@ -21,8 +21,14 @@ use App\Http\Controllers\API\ForecastController;
 
 Route::post('login', [AuthController::class, 'signin']);
 Route::post('register', [AuthController::class, 'signup']);
-Route::get('places', [PlaceController::class, 'index']);
-Route::get('places/{id}', [PlaceController::class, 'show']);
+
+// Places
+Route::prefix('places')->group(function () {
+    Route::get('/', [PlaceController::class, 'index']);
+    Route::get('/{id}', [PlaceController::class, 'show']);
+
+
+});
 
 // Forecasts
 Route::prefix('forecast')->group(function () {
@@ -37,4 +43,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::middleware('auth:sanctum')->get('/places', [PlaceController::class, 'index']);

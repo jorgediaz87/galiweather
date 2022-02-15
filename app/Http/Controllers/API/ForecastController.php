@@ -23,7 +23,7 @@ class ForecastController extends BaseController
 
         $place = Place::find($placeID);
         $forecasts = Forecast::where('place_id', $placeID)->get();
-        Log::channel('forecasts')->info('Forecasts fetched for place: ' . $place->name);
+        Log::channel('forecast')->info('Forecasts fetched for place: ' . $place->name);
         return $this->sendResponse(ForecastResource::collection($forecasts), 'Forecasts fetched for place: ' . $place->name);
     }
 
@@ -35,12 +35,19 @@ class ForecastController extends BaseController
      */
     public function show(int $placeID, Request $request)
     {
-        $beginAt = $request->input('begin_at');
+        $beginAt = $request->input('begin_at') ?? null;
         $endAt = $request->input('end_at');
-
         $place = Place::find($placeID);
-        $forecasts = ForecastService::findByDateAndPlace($place, $beginAt, $endAt);
-        Log::channel('forecasts')->info('Forecasts fetched for place: ' . $place->name. ' between ' . $beginAt . ' and ' . $endAt);
-        return $this->sendResponse(new ForecastResource($forecasts), 'Forecasts fetched for place: ' . $place->name);
+
+        if (!$beginAt) {
+            $forecast = ForecastService::findOneByDateAndPlace($place, $endAt);
+            Log::channel('forecast')->info('Forecasts fetched for place: ' . $place->name. ' between ' . $beginAt . ' and ' . $endAt);
+            return $this->sendResponse(new ForecastResource($forecast), 'Forecasts fetched for place: ' . $place->name);
+        }
+
+        $forecasts = ForecastService::findAllByDateAndPlace($place, $beginAt, $endAt);
+        Log::channel('forecast')->info('Forecasts fetched for place: ' . $place->name. ' between ' . $beginAt . ' and ' . $endAt);
+        return $this->sendResponse(ForecastResource::collection($forecasts), 'Forecasts fetched for place: ' . $place->name);
+
     }
 }

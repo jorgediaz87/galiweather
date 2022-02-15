@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $alphabet = range('A', 'B');
-        foreach ($alphas as $letter) {
+        foreach ($alphabet as $letter) {
             $schedule->command('get:place ' . $letter)->daily();
             $schedule->command('get:forecast')->daily();
             $schedule->command('get:tides')->daily();
